@@ -70,4 +70,13 @@ public class PatientTest {
 		assertEquals(20, testBloodAfter);
 	}
 
+	@Test
+	public void shouldPeriodciallyLoseHealthByOne() {
+		int loopCount = 5;
+		int testHealthBefore = underTest.getHealthLevel();
+		underTest.conditionWorsens(loopCount);
+		int testHealthAfter = underTest.getHealthLevel();
+		assertEquals(testHealthBefore - 1, testHealthAfter);
+	}
+
 }

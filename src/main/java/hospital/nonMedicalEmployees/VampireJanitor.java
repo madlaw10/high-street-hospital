@@ -16,8 +16,10 @@ public class VampireJanitor extends Janitor implements sucksBlood {
 		return thirstLevel;
 	}
 
-	public void getThirsty() {
-		thirstLevel += 1;
+	public void dehydratesByOne(int loopCount) {
+		if (loopCount % 5 == 0) {
+			thirstLevel += 1;
+		}
 	}
 
 	@Override

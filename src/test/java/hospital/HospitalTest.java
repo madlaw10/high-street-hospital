@@ -22,8 +22,9 @@ public class HospitalTest {
 
 	@Test
 	public void shouldPeriodicallySoilHopsitalByFive() {
+		int loopCount = 5;
 		int testCleanlinessBefore = underTest.getCleanliness();
-		underTest.soilHospitalByFive(5);
+		underTest.soilHospitalByFive(loopCount);
 		int testCleanlinessAfter = underTest.getCleanliness();
 		assertEquals(testCleanlinessBefore - 5, testCleanlinessAfter);
 	}

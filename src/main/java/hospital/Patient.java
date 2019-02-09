@@ -39,7 +39,7 @@ public class Patient implements hasBlood, hasHealth {
 				+ ", Health Level: " + getHealthLevel();
 	}
 
-	public void patientConditionWorsens(int loopCount) {
+	public void conditionWorsens(int loopCount) {
 		if (loopCount % 5 == 0) {
 			this.drainHealthByOne();
 		}

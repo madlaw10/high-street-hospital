@@ -20,16 +20,18 @@ public class VampireJanitorTest {
 	}
 
 	@Test
-	public void shouldGetThirstyByOne() {
+	public void shouldPeriodicallyDehydrateByOne() {
+		int loopCount = 5;
 		int testThirstBefore = underTest.getThirstLevel();
-		underTest.getThirsty();
+		underTest.dehydratesByOne(loopCount);
 		int testThirstAfter = underTest.getThirstLevel();
 		assertEquals(testThirstBefore + 1, testThirstAfter);
 	}
 
 	@Test
 	public void shouldQuenchThirstBySuckingBlood() {
-		underTest.getThirsty();
+		int loopCount = 5;
+		underTest.dehydratesByOne(loopCount);
 		underTest.suckBlood(testPatient);
 		int testThirstAfter = underTest.getThirstLevel();
 		assertEquals(0, testThirstAfter);

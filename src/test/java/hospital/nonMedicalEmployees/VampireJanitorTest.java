@@ -1,21 +1,38 @@
 package hospital.nonMedicalEmployees;
+
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import hospital.Patient;
 import hospital.nonMedicalEmployees.VampireJanitor;
 
 public class VampireJanitorTest {
-	
+
 	VampireJanitor underTest;
-	
+	Patient testPatient;
+
 	@Before
 	public void setup() {
-		underTest = new VampireJanitor("", "000");
+		underTest = new VampireJanitor("Kelso", "000");
+		testPatient = new Patient(null, null);
 	}
-	
+
+	@Test
+	public void shouldGetThirstyByOne() {
+		int testThirstBefore = underTest.getThirstLevel();
+		underTest.getThirsty();
+		int testThirstAfter = underTest.getThirstLevel();
+		assertEquals(testThirstBefore + 1, testThirstAfter);
+	}
+
 	@Test
 	public void shouldQuenchThirstBySuckingBlood() {
-		
+		underTest.getThirsty();
+		underTest.suckBlood(testPatient);
+		int testThirstAfter = underTest.getThirstLevel();
+		assertEquals(0, testThirstAfter);
 	}
 
 }

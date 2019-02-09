@@ -6,8 +6,8 @@ public class Receptionist extends Employee {
 
 	private boolean isUsingPhone;
 
-	public Receptionist(String name, String numID) {
-		super(name, numID);
+	public Receptionist(String name, String employeeID) {
+		super(name, employeeID);
 		this.isUsingPhone = false;
 	}
 
@@ -26,6 +26,7 @@ public class Receptionist extends Employee {
 
 	@Override
 	public String toString() {
-		return "Receptionist " + getName() + ", ID Number: " + getIDNumber() + ", Is on the Phone: " + getPhoneStatus();
+		return "\nReceptionist " + getName() + ", ID Number: " + getEmployeeID() + ", Is on the Phone: "
+				+ getPhoneStatus();
 	}
 }

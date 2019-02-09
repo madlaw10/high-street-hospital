@@ -23,7 +23,7 @@ public class SurgeonTest {
 
 	@Test
 	public void shouldHaveIDNumber123() {
-		String testIDNumber = underTest.getIDNumber();
+		String testIDNumber = underTest.getEmployeeID();
 		assertEquals("123", testIDNumber);
 	}
 

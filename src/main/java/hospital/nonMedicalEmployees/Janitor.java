@@ -6,8 +6,8 @@ public class Janitor extends Employee {
 
 	private boolean isSweeping;
 
-	public Janitor(String name, String numID) {
-		super(name, numID);
+	public Janitor(String name, String employeeID) {
+		super(name, employeeID);
 		this.isSweeping = false;
 	}
 
@@ -26,7 +26,7 @@ public class Janitor extends Employee {
 
 	@Override
 	public String toString() {
-		return "\nJanitor " + getName() + ", ID Number: " + getIDNumber() + ", Is Sweeping: " + getIsSweeping();
+		return "\nJanitor " + getName() + ", ID Number: " + getEmployeeID() + ", Is Sweeping: " + getIsSweeping();
 	}
 
 }

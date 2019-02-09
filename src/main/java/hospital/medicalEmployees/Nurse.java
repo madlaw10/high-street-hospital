@@ -1,13 +1,29 @@
 package hospital.medicalEmployees;
 
-import hospital.Employee;
+import java.util.ArrayList;
 
-public class Nurse extends Employee {
+import hospital.Employee;
+import hospital.Patient;
+import hospital.interfaces.administersCare;
+import hospital.interfaces.caresForMultiplePatients;
+import hospital.interfaces.drawsBlood;
+import hospital.interfaces.hasHealth;
+
+public class Nurse extends Employee implements drawsBlood, administersCare, caresForMultiplePatients {
 
 	// Each nurse has a Collection of Patient(s)
+	private ArrayList<Object> patientAssignments = new ArrayList<Object>();
 
-	public Nurse(String name, String numID) {
-		super(name, numID);
+	public Nurse(String name, String employeeID) {
+		super(name, employeeID);
+	}
+
+	public int getAssignmentCount() {
+		return patientAssignments.size();
+	}
+
+	public void assignPatient(Object patient) {
+		patientAssignments.add(patient);
 	}
 
 	@Override
@@ -17,8 +33,22 @@ public class Nurse extends Employee {
 
 	@Override
 	public String toString() {
-		return "\nNurse " + getName() + ", ID Number: " + getIDNumber();
-		// Need to list collection of patients
+		return "\nNurse " + getName() + ", ID Number: " + getEmployeeID() + ", Assigned: " + patientAssignments;
+	}
+
+	@Override
+	public void administerCare(Patient patient) {
+		patient.returnHealthToTen();
+	}
+
+	@Override
+	public void drawBlood(Patient patient) {
+		patient.drainBloodByOne();
+	}
+
+	@Override
+	public void careForPatients(ArrayList<Object> patientAssignments) {
+		((hasHealth) patientAssignments).returnHealthToTen();
 	}
 
 }

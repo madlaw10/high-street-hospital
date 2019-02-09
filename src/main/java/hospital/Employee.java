@@ -3,19 +3,19 @@ package hospital;
 public abstract class Employee {
 
 	private String name;
-	private String numID;
+	private String employeeID;
 
-	public Employee(String name, String numID) {
+	public Employee(String name, String employeeID) {
 		this.name = name;
-		this.numID = numID;
+		this.employeeID = employeeID;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getIDNumber() {
-		return numID;
+	public String getEmployeeID() {
+		return employeeID;
 	}
 
 	public abstract String calculatePay();

@@ -1,23 +1,35 @@
 package hospital.nonMedicalEmployees;
 
-import hospital.interfaces.canSuckBlood;
+import hospital.Patient;
+import hospital.interfaces.sucksBlood;
 
-public class VampireJanitor extends Janitor implements canSuckBlood {
+public class VampireJanitor extends Janitor implements sucksBlood {
 
-	// Need a thirst property
+	private int thirstLevel;
 
-	public VampireJanitor(String name, String numID) {
-		super(name, numID);
+	public VampireJanitor(String name, String employeeID) {
+		super(name, employeeID);
+		this.thirstLevel = THIRST_LEVEL;
+	}
+
+	public int getThirstLevel() {
+		return thirstLevel;
+	}
+
+	public void getThirsty() {
+		thirstLevel += 1;
 	}
 
 	@Override
-	public void suckBlood() {
-		// Need functionality & need test
+	public void suckBlood(Patient patient) {
+		patient.drainBloodByOne();
+		thirstLevel = THIRST_LEVEL;
 	}
 
 	@Override
 	public String toString() {
-		return "\nVampire Janitor " + getName() + ", ID Number: " + getIDNumber() + ", Is Sweeping: " + getIsSweeping();
+		return "\nVampire Janitor " + getName() + ", ID Number: " + getEmployeeID() + ", Is Sweeping: "
+				+ getIsSweeping();
 	}
 
 }

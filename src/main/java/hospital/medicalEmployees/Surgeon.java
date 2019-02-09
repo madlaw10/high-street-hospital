@@ -1,11 +1,13 @@
 package hospital.medicalEmployees;
 
+import hospital.Patient;
+
 public class Surgeon extends Doctor {
 
 	private boolean surgeryStatus;
 
-	public Surgeon(String name, String numID, String specialty) {
-		super(name, numID, specialty);
+	public Surgeon(String name, String employeeID, String specialty) {
+		super(name, employeeID, specialty);
 		this.surgeryStatus = false;
 	}
 
@@ -24,7 +26,13 @@ public class Surgeon extends Doctor {
 
 	@Override
 	public String toString() {
-		return "\n" + getSpecialty() + " Surgeon " + getName() + ", ID Number: " + getIDNumber() + ", Is Operating: "
+		return "\n" + getSpecialty() + " Surgeon " + getName() + ", ID Number: " + getEmployeeID() + ", Is Operating: "
 				+ getSurgeryStatus();
+	}
+
+	@Override
+	public void administerCare(Patient patient) {
+		patient.returnHealthToTen();
+		patient.drainBloodByOne();
 	}
 }

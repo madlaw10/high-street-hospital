@@ -84,8 +84,8 @@ public class Application {
 			System.out.println("ELECTRONIC MANAGEMENT SYSTEM");
 			System.out.println("\n1. Staff directory");
 			System.out.println("2. Patient status");
-			System.out.println("3. Building Status");
-			System.out.println("4. Assign tasks");
+			System.out.println("3. Building status");
+			System.out.println("4. Assign staff");
 			System.out.println("5. Payroll");
 			System.out.println("6. Exit");
 
@@ -122,7 +122,7 @@ public class Application {
 					}
 
 					System.out.println("\nPEOPLE MOVER 3000TM");
-					System.out.println("\n1. Test Patient Vitals");
+					System.out.println("1. Draw blood for testing");
 					System.out.println("2. Administer Patient Care");
 					System.out.println("3. Send Patient to Surgery");
 					System.out.println("4. Clean Hospital");
@@ -134,9 +134,9 @@ public class Application {
 					case "1":
 						System.out.println("\n From which patient would you like to draw blood?");
 						System.out.println(hospital.getPatients());
-						System.out.println("\nEnter patient ID:");
-						String patientID = input.nextLine();
-						Patient bloodDrawPatient = hospital.findPatient(patientID);
+						System.out.println("\nEnter Patient ID:");
+						String bloodPatientID = input.nextLine();
+						Patient bloodDrawPatient = hospital.findPatient(bloodPatientID);
 
 						// Find nurse assigned to patient to draw blood
 						for (Employee employee : hospital.getEmployees()) {
@@ -154,10 +154,46 @@ public class Application {
 						}
 						break;
 					case "2":
-
+						System.out.println(
+								"\nDoctors can administer care to one patient and return all vitals to healthy levels."
+										+ "\nNurses can administer care to all assigned patients, but are not authorized to replenish blood.");
+						System.out.println("\nWhich medical personnel would you like to assign to patient care?");
+						
+						// Provide list of Doctors & Nurses+patients only
+						for (Employee employee : hospital.getEmployees()) {
+							if (employee instanceof Doctor) {
+								System.out.print(((Doctor) employee).toString());
+							} else if (employee instanceof Nurse) {
+								System.out.print(((Nurse) employee).toString());
+							}
+						}
+						System.out.println("\nEnter Employee ID:");
+						String employeeID = input.nextLine();
+						Employee careProvider = hospital.findEmployee(employeeID);
+						
+						// Determine the type of care provided based on employee choice
+						if (careProvider instanceof Doctor) {
+							System.out.println(
+									"To which patient will Doctor " + careProvider.getName() + " administer care?");
+							System.out.println(hospital.getPatients());
+							System.out.println("\nEnter Patient ID:");
+							String carePatientID = input.nextLine();
+							Patient carePatient = hospital.findPatient(carePatientID);
+							((Doctor) careProvider).administerCare(carePatient);
+							System.out.println("\nDoctor " + careProvider.getName() + " restored Patient "
+									+ carePatient.getName() + " to full health.");
+							System.out.println("\nUPDATED PATIENT STATUS: " + carePatient.toString());
+						} else if (careProvider instanceof Nurse) {
+							((Nurse) careProvider).careForPatients(((Nurse) careProvider).getPatientAssignments());
+							System.out.println(
+									"Patients assigned to Nurse " + careProvider.getName() + " have been treated.");
+							System.out.println("\nUPDATED PATIENT STATUS:");
+							System.out.println(((Nurse) careProvider).getPatientAssignments());
+						}
 						break;
 					case "3":
-
+						// keep surgery true for limited loopCount (?)
+						// keep patient in surgery (?)
 						break;
 					case "4":
 						// Need a way to halt dirt if sweeping is true
@@ -166,6 +202,10 @@ public class Application {
 						taskMenu = false;
 						break;
 					}
+
+					testForCleanliness(hospital);
+
+					testForPatientHealth(hospital);
 				}
 				break;
 			case "5":
@@ -182,31 +222,38 @@ public class Application {
 				break;
 			}
 
-			if (hospital.getCleanliness() <= 50 && hospital.getCleanliness() > 0) {
-				System.out.println("High St. Hospital is dirty. Assign janitorial staff to maintain cleanliness.");
-			} else if (hospital.getCleanliness() <= 0) {
-				System.out.println(
-						"Hight St. Hospital is too dirty. It is no longer sanitary to adminsiter patient care.");
-				System.exit(0);
-			}
+			testForCleanliness(hospital);
 
-			for (Patient patient : hospital.getPatients()) {
-				if (patient.getHealthLevel() <= 5 && patient.getHealthLevel() > 0) {
-					System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
-							+ ", is no longer in stable condition.");
-				} else if (patient.getHealthLevel() <= 0) {
-					System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
-							+ ", is crashing. Assign medical personnel to adminsiter care immediately.");
-				}
-				if (patient.getBloodLevel() <= 10 && patient.getBloodLevel() > 0) {
-					System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
-							+ ", has dangerously low blood supply.");
-				} else if (patient.getBloodLevel() <= 0) {
-					System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
-							+ ", has lost too much blood. Assign medical personnel to adminsiter care immediately.");
-				}
-			}
+			testForPatientHealth(hospital);
 
+		}
+	}
+
+	public static void testForPatientHealth(Hospital hospital) {
+		for (Patient patient : hospital.getPatients()) {
+			if (patient.getHealthLevel() <= 5 && patient.getHealthLevel() > 0) {
+				System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
+						+ ", is no longer in stable condition.");
+			} else if (patient.getHealthLevel() <= 0) {
+				System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
+						+ ", is crashing. Assign medical personnel to adminsiter care immediately.");
+			}
+			if (patient.getBloodLevel() <= 10 && patient.getBloodLevel() > 0) {
+				System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
+						+ ", has dangerously low blood supply.");
+			} else if (patient.getBloodLevel() <= 0) {
+				System.out.println("Patient " + patient.getPatientID() + ", " + patient.getName()
+						+ ", has lost too much blood. Assign medical personnel to adminsiter care immediately.");
+			}
+		}
+	}
+
+	public static void testForCleanliness(Hospital hospital) {
+		if (hospital.getCleanliness() <= 50 && hospital.getCleanliness() > 0) {
+			System.out.println("High St. Hospital is dirty. Assign janitorial staff to maintain cleanliness.");
+		} else if (hospital.getCleanliness() <= 0) {
+			System.out.println("Hight St. Hospital is too dirty. It is no longer sanitary to adminsiter patient care.");
+			System.exit(0);
 		}
 	}
 }

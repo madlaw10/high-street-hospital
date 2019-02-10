@@ -20,7 +20,7 @@ public class Application {
 
 		// Need some hospital staff
 		Surgeon firstSurgeon = new Surgeon("Turk", "004", "Heart");
-		Surgeon secondSurgeon = new Surgeon("The Todd", "005", "Brain");
+		Surgeon secondSurgeon = new Surgeon("T. Todd", "005", "Brain");
 		Doctor firstDoctor = new Doctor("JD", "001", "Heart");
 		Doctor secondDoctor = new Doctor("Elliot", "002", "Brain");
 		Doctor thirdDoctor = new Doctor("Cox", "003", "General");
@@ -69,20 +69,11 @@ public class Application {
 		while (mainMenu) {
 
 			loopCount += 1;
-			// Need a way to halt dirt if sweeping is true
-			hospital.soilHospitalByFive(loopCount);
-			for (Patient patient : hospital.getPatients()) {
-				patient.conditionWorsens(loopCount);
-			}
-			for (Employee employee : hospital.getEmployees()) {
-				if (employee instanceof VampireJanitor) {
-					((VampireJanitor) employee).dehydratesByOne(loopCount);
-				}
-			}
+			impactOfLoopCount(hospital, loopCount);
 
 			System.out.println("\nHIGH STREET HOSPITAL");
-			System.out.println("ELECTRONIC MANAGEMENT SYSTEM");
-			System.out.println("\n1. Staff directory");
+			System.out.println("MANAGEMENT SYSTEM TERMINAL");
+			System.out.println("1. Staff directory");
 			System.out.println("2. Patient status");
 			System.out.println("3. Building status");
 			System.out.println("4. Assign staff");
@@ -98,7 +89,7 @@ public class Application {
 				break;
 			case "2":
 				System.out.println("\nPATIENT STATUS");
-				System.out.println("\nBed capacity: " + hospital.getPatientCount() + " patients");
+				System.out.println("\nBeds Filled: " + hospital.getPatientCount());
 				System.out.println(hospital.getPatients());
 				break;
 			case "3":
@@ -110,29 +101,20 @@ public class Application {
 				while (taskMenu) {
 
 					loopCount += 1;
-					// Need a way to halt dirt if sweeping is true
-					hospital.soilHospitalByFive(loopCount);
-					for (Patient patient : hospital.getPatients()) {
-						patient.conditionWorsens(loopCount);
-					}
-					for (Employee employee : hospital.getEmployees()) {
-						if (employee instanceof VampireJanitor) {
-							((VampireJanitor) employee).dehydratesByOne(loopCount);
-						}
-					}
+					impactOfLoopCount(hospital, loopCount);
 
 					System.out.println("\nPEOPLE MOVER 3000TM");
 					System.out.println("1. Draw blood for testing");
 					System.out.println("2. Administer Patient Care");
 					System.out.println("3. Send Patient to Surgery");
 					System.out.println("4. Clean Hospital");
-					System.out.println("5. Return to RECORDS MANAGEMENT SYSTEM");
+					System.out.println("5. Return to MANAGEMENT SYSTEM TERMINAL");
 
 					String taskMenuSelection = input.nextLine();
 
 					switch (taskMenuSelection) {
 					case "1":
-						System.out.println("\n From which patient would you like to draw blood?");
+						System.out.println("\nFrom which patient would you like to draw blood?");
 						System.out.println(hospital.getPatients());
 						System.out.println("\nEnter Patient ID:");
 						String bloodPatientID = input.nextLine();
@@ -158,10 +140,10 @@ public class Application {
 								"\nDoctors can administer care to one patient and return all vitals to healthy levels."
 										+ "\nNurses can administer care to all assigned patients, but are not authorized to replenish blood.");
 						System.out.println("\nWhich medical personnel would you like to assign to patient care?");
-						
+
 						// Provide list of Doctors & Nurses+patients only
 						for (Employee employee : hospital.getEmployees()) {
-							if (employee instanceof Doctor) {
+							if (employee instanceof Doctor && !(employee instanceof Surgeon)) {
 								System.out.print(((Doctor) employee).toString());
 							} else if (employee instanceof Nurse) {
 								System.out.print(((Nurse) employee).toString());
@@ -170,7 +152,7 @@ public class Application {
 						System.out.println("\nEnter Employee ID:");
 						String employeeID = input.nextLine();
 						Employee careProvider = hospital.findEmployee(employeeID);
-						
+
 						// Determine the type of care provided based on employee choice
 						if (careProvider instanceof Doctor) {
 							System.out.println(
@@ -192,11 +174,71 @@ public class Application {
 						}
 						break;
 					case "3":
-						// keep surgery true for limited loopCount (?)
-						// keep patient in surgery (?)
+						System.out.println(
+								"\nSurgery will return a patient to full health, but the patient will lose some blood in the process.\nWhich patient is going to surgery?");
+						System.out.println(hospital.getPatients());
+						System.out.println("\nEnter Patient ID:");
+						String surgeryPatientID = input.nextLine();
+						Patient surgeryPatient = hospital.findPatient(surgeryPatientID);
+						System.out.println("Patient " + surgeryPatient.getPatientID() + ", " + surgeryPatient.getName()
+								+ ", is in the operating room and prepped for surgery.\nWhich surgeon is leading the operation?");
+
+						// Provide list of Surgeons only
+						for (Employee employee : hospital.getEmployees()) {
+							if (employee instanceof Surgeon) {
+								System.out.print(((Surgeon) employee).toString());
+							}
+						}
+						System.out.println("\nEnter Employee ID:");
+						String surgeonID = input.nextLine();
+						Employee leadSurgeon = hospital.findEmployee(surgeonID);
+						if (((Surgeon) leadSurgeon).getSurgeryStatus()) {
+							System.out.println(
+									"Surgeon " + leadSurgeon.getName() + " is currently operating on another patient.");
+							// keep surgery "true" for limited loopCount(?)
+						} else {
+							((Surgeon) leadSurgeon).toggleSurgery();
+							((Surgeon) leadSurgeon).administerCare(surgeryPatient);
+							System.out.println("Surgeon " + leadSurgeon.getName() + " is now performing "
+									+ ((Surgeon) leadSurgeon).getSpecialty() + " Surgery on Patient "
+									+ surgeryPatient.getName());
+							// keep patient "in surgery"(?)
+						}
+						System.out.println();
 						break;
 					case "4":
-						// Need a way to halt dirt if sweeping is true
+						System.out.println("Assigning a Janitor to sweep the hospital will improve overall cleanliness."
+								+ "\nAssigning a Vampire Janitor to sweep the hospital will result in "
+								+ "inexplicable blood loss for all patients.\nWhich employee would you like "
+								+ "to assign to hospital maintenance?");
+						// Provide list of Janitors & Vampire Janitors only
+						for (Employee employee : hospital.getEmployees()) {
+							if (employee instanceof Janitor) {
+								System.out.print(((Janitor) employee).toString());
+							}
+						}
+						System.out.println("\nEnter Employee ID:");
+						String janitorID = input.nextLine();
+						Employee janitorToClean = hospital.findEmployee(janitorID);
+						if (janitorToClean instanceof VampireJanitor) {
+							if (((VampireJanitor) janitorToClean).getIsSweeping()) {
+								((VampireJanitor) janitorToClean).suckBlood(hospital.getPatients());
+								System.out.println("Vampire Janitor " + janitorToClean.getName() + " is \"sweeping\"");
+							} else {
+								((VampireJanitor) janitorToClean).toggleSweeping();
+								((VampireJanitor) janitorToClean).suckBlood(hospital.getPatients());
+								System.out.println("Vampire Janitor " + janitorToClean.getName() + " is \"sweeping\"");
+							}
+						} else {
+							if (((Janitor) janitorToClean).getIsSweeping()) {
+								hospital.cleanHospitalByFive();
+								System.out.println("Janitor " + janitorToClean.getName() + " is sweeping");
+							} else {
+								((Janitor) janitorToClean).toggleSweeping();
+								hospital.cleanHospitalByFive();
+								System.out.println("Janitor " + janitorToClean.getName() + " is sweeping");
+							}
+						}
 						break;
 					case "5":
 						taskMenu = false;
@@ -211,7 +253,7 @@ public class Application {
 			case "5":
 				System.out.println("\nHOSPITAL PAYROLL");
 				for (Employee employee : hospital.getEmployees()) {
-					System.out.println("Employee " + employee.getEmployeeID() + " (" + employee.getName() + "): "
+					System.out.println("Employee " + employee.getEmployeeID() + " (" + employee.getName() + "):\t"
 							+ employee.calculatePay() + " annually.");
 				}
 				break;
@@ -226,6 +268,19 @@ public class Application {
 
 			testForPatientHealth(hospital);
 
+		}
+	}
+
+	public static void impactOfLoopCount(Hospital hospital, int loopCount) {
+		hospital.soilHospitalByFive(loopCount);
+		// Need a way to halt dirt accumulation if sweeping is true
+		for (Patient patient : hospital.getPatients()) {
+			patient.conditionWorsens(loopCount);
+		}
+		for (Employee employee : hospital.getEmployees()) {
+			if (employee instanceof VampireJanitor) {
+				((VampireJanitor) employee).dehydratesByOne(loopCount);
+			}
 		}
 	}
 

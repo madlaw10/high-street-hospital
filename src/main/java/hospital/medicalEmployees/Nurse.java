@@ -18,6 +18,10 @@ public class Nurse extends Employee implements drawsBlood, administersCare, care
 		super(name, employeeID);
 	}
 
+	public ArrayList<Object> getPatientAssignments() {
+		return patientAssignments;
+	}
+
 	public int getAssignmentCount() {
 		return patientAssignments.size();
 	}

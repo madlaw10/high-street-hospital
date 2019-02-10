@@ -30,8 +30,8 @@ public class VampireJanitor extends Janitor implements sucksBlood {
 
 	@Override
 	public String toString() {
-		return "\nVampire Janitor " + getName() + ", ID Number: " + getEmployeeID() + ", Is Sweeping: "
-				+ getIsSweeping();
+		return "\nVampire Janitor " + getName() + ", ID Number: " + getEmployeeID() + ", Thirst Level: "
+				+ getThirstLevel() + ", Is Sweeping: " + getIsSweeping();
 	}
 
 }

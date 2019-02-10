@@ -20,8 +20,8 @@ public class Hospital {
 		}
 	}
 
-	public void cleanHospitalFully() {
-		cleanliness = 100;
+	public void cleanHospitalByFive() {
+		cleanliness += 5;
 	}
 
 	private HashMap<String, Employee> employees = new HashMap<String, Employee>();

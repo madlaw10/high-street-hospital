@@ -30,10 +30,11 @@ public class HospitalTest {
 	}
 
 	@Test
-	public void shouldBeAbleToCleanHospitalFully() {
-		underTest.cleanHospitalFully();
+	public void shouldBeAbleToCleanHospitalByFive() {
+		int testCleanlinessBefore = underTest.getCleanliness();
+		underTest.cleanHospitalByFive();
 		int testCleanlinessAfter = underTest.getCleanliness();
-		assertEquals(100, testCleanlinessAfter);
+		assertEquals(testCleanlinessBefore + 5, testCleanlinessAfter);
 	}
 
 	@Test

@@ -5,18 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import hospital.Patient;
-import hospital.nonMedicalEmployees.VampireJanitor;
+import hospital.Hospital;
 
 public class VampireJanitorTest {
 
 	VampireJanitor underTest;
-	Patient testPatient;
+	Hospital testHospital;
 
 	@Before
 	public void setup() {
 		underTest = new VampireJanitor("Kelso", "000");
-		testPatient = new Patient(null, null);
+		testHospital = new Hospital();
 	}
 
 	@Test
@@ -32,7 +31,7 @@ public class VampireJanitorTest {
 	public void shouldQuenchThirstBySuckingBlood() {
 		int loopCount = 5;
 		underTest.dehydratesByOne(loopCount);
-		underTest.suckBlood(testPatient);
+		underTest.suckBlood(testHospital.getPatients());
 		int testThirstAfter = underTest.getThirstLevel();
 		assertEquals(0, testThirstAfter);
 	}

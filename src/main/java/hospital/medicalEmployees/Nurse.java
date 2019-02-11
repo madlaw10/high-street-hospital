@@ -18,6 +18,10 @@ public class Nurse extends Employee implements drawsBlood, administersCare, care
 		super(name, employeeID);
 	}
 
+	public ArrayList<Object> getPatientAssignments() {
+		return patientAssignments;
+	}
+
 	public int getAssignmentCount() {
 		return patientAssignments.size();
 	}
@@ -48,7 +52,9 @@ public class Nurse extends Employee implements drawsBlood, administersCare, care
 
 	@Override
 	public void careForPatients(ArrayList<Object> patientAssignments) {
-		((hasHealth) patientAssignments).returnHealthToTen();
+		for (Object patient : patientAssignments) {
+			((Patient) patient).returnHealthToTen();
+		}
 	}
 
 }

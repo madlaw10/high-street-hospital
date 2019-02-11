@@ -1,5 +1,7 @@
 package hospital.nonMedicalEmployees;
 
+import java.util.Collection;
+
 import hospital.Patient;
 import hospital.interfaces.sucksBlood;
 
@@ -23,15 +25,16 @@ public class VampireJanitor extends Janitor implements sucksBlood {
 	}
 
 	@Override
-	public void suckBlood(Patient patient) {
-		patient.drainBloodByOne();
+	public void suckBlood(Collection<Patient> patients) {
+		for (Patient patient : patients)
+			patient.drainBloodByOne();
 		thirstLevel = THIRST_LEVEL;
 	}
 
 	@Override
 	public String toString() {
-		return "\nVampire Janitor " + getName() + ", ID Number: " + getEmployeeID() + ", Is Sweeping: "
-				+ getIsSweeping();
+		return "\nVampire Janitor " + getName() + ", ID Number: " + getEmployeeID() + ", Thirst Level: "
+				+ getThirstLevel() + ", Is Sweeping: " + getIsSweeping();
 	}
 
 }

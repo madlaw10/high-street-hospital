@@ -48,6 +48,9 @@ public class Patient implements hasBlood, hasHealth {
 	@Override
 	public void drainHealthByOne() {
 		healthLevel -= 1;
+		if (healthLevel < 0) {
+			healthLevel = 0;
+		}
 	}
 
 	@Override
@@ -58,6 +61,9 @@ public class Patient implements hasBlood, hasHealth {
 	@Override
 	public void drainBloodByOne() {
 		bloodLevel -= 1;
+		if (bloodLevel < 0) {
+			bloodLevel = 0;
+		}
 	}
 
 	@Override

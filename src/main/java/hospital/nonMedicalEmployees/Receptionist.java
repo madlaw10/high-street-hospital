@@ -3,6 +3,7 @@ package hospital.nonMedicalEmployees;
 import hospital.Employee;
 
 public class Receptionist extends Employee {
+	// give receptionist a task (?)
 
 	private boolean isUsingPhone;
 
